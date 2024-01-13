@@ -59,7 +59,7 @@ module ARTAU(
         end
         else begin
             case (ARTAU_state_fast)
-                2'b00, 2'b11: begin
+                2'b00: begin
                     if (scan_for_target) begin
                         if (pulse_count > 0)
                             distance_to_target = LIGHT_SPEED * ($time - listen_to_echo_started_at) / 2;
@@ -114,7 +114,15 @@ module ARTAU(
                     end
                 end
                 2'b11: begin
-                    if (($time - status_update_timer_started_at) >= 3000 & scan_for_target == 0) begin
+                    if (scan_for_target) begin
+                        if (pulse_count > 0)
+                            distance_to_target = LIGHT_SPEED * ($time - listen_to_echo_started_at) / 2;
+                        radar_pulse_trigger = 1;
+                        pulse_emmision_started_at = $time;
+                        pulse_count = pulse_count + 1;
+                        ARTAU_state_fast <= 2'b01;
+                    end
+                    else if (($time - status_update_timer_started_at) >= 3000) begin // scan_for_target == 0
                         status_update_timer_started_at = NULL;
                         ARTAU_state_fast <= 2'b00;
 
