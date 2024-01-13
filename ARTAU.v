@@ -139,7 +139,7 @@ module ARTAU(
                 if (radar_echo & pulse_count == 1) begin
                     if (switch_to_emitting == 0) begin
                         if (pulse_count > 0)
-                            distance_to_target = LIGHT_SPEED * ($time - listen_to_echo_started_at) / 1000_000 / 2;
+                            distance_to_target = LIGHT_SPEED * ($time - listen_to_echo_started_at) / 1_000_000 / 2;
                         radar_pulse_trigger = 1;
                         pulse_emmision_started_at = $time;
                         pulse_count = pulse_count + 1;
@@ -149,8 +149,8 @@ module ARTAU(
                 else if (switch_to_emitting == 0 & radar_echo & pulse_count == 2) begin
                     if (switch_to_assessing == 0) begin
                         old_distance_to_target = distance_to_target;
-                        distance_to_target = LIGHT_SPEED * ($time - listen_to_echo_started_at) / 1000_000 / 2;
-                        if (distance_to_target + jet_speed * ($time - listen_to_echo_started_at) < old_distance_to_target)begin
+                        distance_to_target = LIGHT_SPEED * ($time - listen_to_echo_started_at) / 1_000_000 / 2;
+                        if (distance_to_target + jet_speed * ($time - listen_to_echo_started_at) / 1_000_000 < old_distance_to_target)begin
                             if (distance_to_target < max_safe_distance) begin
                                 threat_detected = 1;
                             end
